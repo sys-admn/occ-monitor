@@ -8,11 +8,11 @@ data "azurerm_storage_account" "monitored_storage" {
 }
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "file_reception_alert" {
-  name                = "flux-file-received-${var.environment}"
+  name                = "Flux Reception de fichier en ${var.environment}"
   resource_group_name = data.azurerm_resource_group.flux_rg.name
   location            = var.location
   
-  evaluation_frequency = "PT1M"
+  evaluation_frequency = "PT5M"
   window_duration      = "PT5M"
   scopes               = [var.log_analytics_workspace_id]
   severity             = 3

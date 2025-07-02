@@ -35,8 +35,8 @@ locals {
       name             = "response-time-alert"
       description      = "Alert when Function App response time is high"
       severity         = 2
-      frequency        = "PT5M"
-      window_size      = "PT5M"
+      frequency        = "PT15M"
+      window_size      = "PT30M"
       metric_namespace = "Microsoft.Web/sites"
       metric_name      = "HttpResponseTime"
       aggregation      = "Average"
@@ -59,7 +59,7 @@ locals {
 }
 
 resource "azurerm_monitor_metric_alert" "function_alerts" {
-  for_each = {
+for_each = {
     for combo in flatten([
       for fa_key, fa in { for fa in var.function_apps : fa.name => fa } : [
         for alert_key, alert in local.function_alerts : {
@@ -81,18 +81,18 @@ resource "azurerm_monitor_metric_alert" "function_alerts" {
   frequency           = each.value.alert.frequency
   window_size         = each.value.alert.window_size
 
-  criteria {
-    metric_namespace = each.value.alert.metric_namespace
-    metric_name      = each.value.alert.metric_name
-    aggregation      = each.value.alert.aggregation
-    operator         = each.value.alert.operator
-    threshold        = each.value.alert.threshold
+criteria {
+   metric_namespace = each.value.alert.metric_namespace
+   metric_name      = each.value.alert.metric_name
+   aggregation      = each.value.alert.aggregation
+   operator         = each.value.alert.operator
+   threshold        = each.value.alert.threshold
   }
 
-  action {
-    action_group_id = var.action_group_id
+action {
+   action_group_id = var.action_group_id
   }
-}
+ }
 
 resource "azurerm_monitor_diagnostic_setting" "function_diagnostics" {
   for_each           = { for fa in var.function_apps : fa.name => fa }
@@ -102,6 +102,10 @@ resource "azurerm_monitor_diagnostic_setting" "function_diagnostics" {
 
   enabled_log {
     category = "FunctionAppLogs"
+  }
+
+  enabled_log {
+    category = "AppServiceAuthenticationLogs"
   }
 
   enabled_metric {
