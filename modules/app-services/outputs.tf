@@ -14,7 +14,7 @@ output "app_service_plan_ids" {
 }
 
 # Alertes métriques supprimées - remplacées par unified monitoring
-# output "alert_ids" {
-#   description = "List of App Services alert resource IDs"
-#   value       = [for alert in azurerm_monitor_metric_alert.function_alerts : alert.id]
-# }
+output "alert_ids" {
+description = "List of App Services alert resource IDs"
+value       = [for alert in azurerm_monitor_metric_alert.function_alerts : alert.id]
+}

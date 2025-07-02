@@ -98,7 +98,7 @@ module "network_monitoring" {
 }
 
 # Key Vault Monitoring
-/*
+
 module "keyvault_monitoring" {
   source = "./modules/keyvault"
   
@@ -109,7 +109,7 @@ module "keyvault_monitoring" {
   environment = var.environment
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.central.id
   action_group_id = azurerm_monitor_action_group.central.id
-}*/
+}
 
 module "dashboard_monitoring" {
   source = "./modules/dashboard"
